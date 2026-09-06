@@ -198,23 +198,6 @@ stage. This reduces both the runtime surface and exposure to host-specific Debia
 mirror/proxy failures. The source-build stage still needs GitHub and Go module
 network access on the first build.
 
-Module downloads default to `GOPROXY=direct`, configurable at build time through
-`MINIO_GOPROXY`. This removes a mandatory dependency on the public module proxy,
-whose HTTP 403 responses stopped development builds on one user's network; it
-does not establish why that network received a denial. Direct access may be
-slower and still requires upstream repository/module-discovery hosts and, when
-needed, `sum.golang.org`. It is not an offline-build solution. Organizations can
-select an approved module proxy instead; this setting must follow their network
-policy and must not contain credentials, since build arguments are not secrets.
-
-The source commit remains pinned, `go build -mod=readonly` prevents implicit
-module requirement changes, the checksum database remains enabled, and `go mod
-verify` checks downloaded module-cache integrity. BuildKit cache mounts preserve
-completed dependency downloads and compilation work across build retries; caches
-are an optimization, not a substitute for verification or a guarantee of
-availability. See the [Go module reference](https://go.dev/ref/mod#authenticating)
-and [Docker cache documentation](https://docs.docker.com/build/cache/optimize/).
-
 DELETE removes the database row immediately and queues object deletion in the
 same transaction as its audit event. It does not promise erasure from provider
 version history, replicas, backups or retention policies. That requires a defined

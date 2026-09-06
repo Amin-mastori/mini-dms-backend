@@ -92,12 +92,6 @@ overwrites an existing `.env`. Keep `.env` private. Never paste it into an issue
 > a compiled health probe and does not run `apt-get`. See
 > [the storage decision](ARCHITECTURE.md#storage).
 
-MinIO downloads Go modules directly from their upstream repositories by default;
-checksum verification remains enabled. An approved module proxy can be selected
-with the build-only `MINIO_GOPROXY` setting. Existing `.env` files do not need to
-be regenerated. If a build fails, do not continue to `createsuperuser`: first
-follow the [build troubleshooting guide](docs/WINDOWS_SETUP.md#minio-module-download-failures).
-
 After startup:
 
 | Resource | Address |
@@ -168,7 +162,6 @@ configuration contains credentials.
 | `S3_ENDPOINT_URL`, `S3_REGION`, `S3_ADDRESSING_STYLE` | Provider connection; `http://minio:9000`, `us-east-1`, `path` in development |
 | `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | Private application bucket and identity |
 | `MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD` | Development bootstrap/console only, not application credentials |
-| `MINIO_GOPROXY` | MinIO build only; `direct` downloads from upstream repositories; optionally set an approved Go module proxy |
 | `OCR_LANGUAGES` | `eng+fas`; corresponding Tesseract language packs must be installed |
 | `MAX_UPLOAD_BYTES` | `26214400` (25 MiB) |
 | `MAX_OCR_PAGES`, `MAX_OCR_PIXELS`, `MAX_OCR_CHARS` | `20`, `20000000`, `200000` |

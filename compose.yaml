@@ -73,8 +73,6 @@ services:
     build:
       context: .
       dockerfile: docker/minio.Dockerfile
-      args:
-        GOPROXY: ${MINIO_GOPROXY:-direct}
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
