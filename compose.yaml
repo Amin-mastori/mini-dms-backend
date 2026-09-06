@@ -1,0 +1,165 @@
+name: mini-dms
+
+x-app: &app
+  build:
+    context: .
+    target: runtime
+  image: mini-dms:local
+  environment: &app-env
+    DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Run scripts/init_env.py}
+    JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:?Run scripts/init_env.py}
+    DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,api}
+    DJANGO_SECURE_SSL_REDIRECT: ${DJANGO_SECURE_SSL_REDIRECT:-false}
+    DJANGO_HSTS_SECONDS: ${DJANGO_HSTS_SECONDS:-0}
+    TRUST_PROXY_HEADERS: ${TRUST_PROXY_HEADERS:-false}
+    POSTGRES_DB: ${POSTGRES_DB:?Run scripts/init_env.py}
+    POSTGRES_USER: ${POSTGRES_USER:?Run scripts/init_env.py}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/init_env.py}
+    POSTGRES_HOST: ${POSTGRES_HOST:-db}
+    POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+    REDIS_URL: ${REDIS_URL:?Run scripts/init_env.py}
+    REDIS_CACHE_URL: ${REDIS_CACHE_URL:?Run scripts/init_env.py}
+    S3_ACCESS_KEY: ${S3_ACCESS_KEY:?Run scripts/init_env.py}
+    S3_SECRET_KEY: ${S3_SECRET_KEY:?Run scripts/init_env.py}
+    S3_BUCKET: ${S3_BUCKET:-documents}
+    S3_ENDPOINT_URL: ${S3_ENDPOINT_URL:-http://minio:9000}
+    S3_REGION: ${S3_REGION:-us-east-1}
+    S3_ADDRESSING_STYLE: ${S3_ADDRESSING_STYLE:-path}
+    OCR_LANGUAGES: ${OCR_LANGUAGES:-eng+fas}
+    MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-26214400}
+    MAX_OCR_PAGES: ${MAX_OCR_PAGES:-20}
+    MAX_OCR_PIXELS: ${MAX_OCR_PIXELS:-20000000}
+    MAX_OCR_CHARS: ${MAX_OCR_CHARS:-200000}
+    OCR_PAGE_TIMEOUT: ${OCR_PAGE_TIMEOUT:-45}
+    LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  init: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp:size=512m,mode=1777
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+
+services:
+  db:
+    image: postgres:17.11-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Run scripts/init_env.py}
+      POSTGRES_USER: ${POSTGRES_USER:?Run scripts/init_env.py}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/init_env.py}
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4.11-alpine
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Run scripts/init_env.py}
+    command: [sh, -c, 'exec redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy noeviction --requirepass "$${REDIS_PASSWORD}"']
+    volumes: [redis-data:/data]
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$${REDIS_PASSWORD}" redis-cli ping | grep -q PONG']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: mini-dms-minio:2025-10-15
+    build:
+      context: .
+      dockerfile: docker/minio.Dockerfile
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Run scripts/init_env.py}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run scripts/init_env.py}
+    ports: ["127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"]
+    volumes: [object-data:/data]
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:9000/minio/health/live]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  storage-init:
+    <<: *app
+    image: mini-dms-storage-init:local
+    build:
+      context: .
+      target: storage-init
+    restart: "no"
+    read_only: false
+    environment:
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_BUCKET: ${S3_BUCKET:-documents}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Run scripts/init_env.py}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run scripts/init_env.py}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?Run scripts/init_env.py}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?Run scripts/init_env.py}
+    depends_on:
+      minio: {condition: service_healthy}
+
+  migrate:
+    <<: *app
+    restart: "no"
+    command: python manage.py migrate --noinput
+    depends_on:
+      db: {condition: service_healthy}
+
+  api:
+    <<: *app
+    ports: ["127.0.0.1:${API_PORT:-8000}:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      storage-init: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:8000/health/live/]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+    mem_limit: 768m
+
+  worker:
+    <<: *app
+    command: celery -A config worker --loglevel=WARNING --concurrency=2 --hostname=worker@%h
+    stop_grace_period: 190s
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      storage-init: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    mem_limit: 1536m
+
+  dispatcher:
+    <<: *app
+    command: python manage.py dispatch_jobs
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    mem_limit: 256m
+
+  test:
+    <<: *app
+    image: mini-dms-test:local
+    build:
+      context: .
+      target: test
+    profiles: [test]
+    restart: "no"
+    read_only: false
+    environment:
+      <<: *app-env
+      DJANGO_SETTINGS_MODULE: config.settings.test
+      TEST_POSTGRES: "1"
+    depends_on:
+      db: {condition: service_healthy}
+
+volumes:
+  postgres-data:
+  redis-data:
+  object-data:
