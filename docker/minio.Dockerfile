@@ -1,13 +1,21 @@
+# syntax=docker/dockerfile:1
 # The upstream October security release is source-only; build the exact commit.
 FROM golang:1.26.7-bookworm AS build
 WORKDIR /src
 RUN git init && git remote add origin https://github.com/minio/minio.git \
     && git fetch --depth 1 origin 9e49d5e7a648f00e26f2246f4dc28e6b07f8c84a \
     && git checkout --detach FETCH_HEAD
-ENV CGO_ENABLED=0 GOTOOLCHAIN=local
-RUN go build -trimpath -o /out/minio .
+ARG GOPROXY=direct
+ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOSUMDB=sum.golang.org GOCACHE=/go/build-cache
+# Direct downloads avoid a mandatory module-proxy dependency. Keep verification enabled.
+RUN --mount=type=cache,id=mini-dms-go-mod,target=/go/pkg/mod,sharing=locked \
+    --mount=type=cache,id=mini-dms-go-build,target=/go/build-cache,sharing=locked \
+    go build -mod=readonly -trimpath -o /out/minio . \
+    && go mod verify
 COPY docker/minio-healthcheck.go /healthcheck/main.go
-RUN go build -trimpath -ldflags="-s -w" -o /out/minio-healthcheck /healthcheck/main.go \
+RUN --mount=type=cache,id=mini-dms-go-mod,target=/go/pkg/mod,sharing=locked \
+    --mount=type=cache,id=mini-dms-go-build,target=/go/build-cache,sharing=locked \
+    go build -mod=readonly -trimpath -ldflags="-s -w" -o /out/minio-healthcheck /healthcheck/main.go \
     && install -d -o 10001 -g 10001 /out/rootfs/data /out/rootfs/tmp
 
 FROM scratch

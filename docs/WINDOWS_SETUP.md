@@ -112,6 +112,8 @@ you deliberately want to erase that evaluation data.
 | --- | --- |
 | Docker engine connection error | Start Docker Desktop; confirm Linux containers and WSL integration if applicable |
 | A previous MinIO build fails in `apt-get` with exit 100 | Pull the current repository revision; the final MinIO image no longer uses `apt-get`. Rebuild with `docker compose build minio`. |
+| MinIO module downloads return `403 Forbidden` | Follow the module-download section below; repeating `createsuperuser` cannot fix a failed image build |
+| `service "api" is not running`, with an empty `compose ps -a` | No containers are listed for this Compose project/context; resolve the first build/startup error before running commands inside API |
 | Private repository not found | Sign in to the correct GitHub account with repository access |
 | Port 8000/9001 already in use | Set `API_PORT` / `MINIO_CONSOLE_PORT` in `.env` and restart; adjust browser URLs |
 | Invalid database password after editing `.env` | Existing PostgreSQL volumes retain their original credentials; restore the original password or rotate it deliberately |
@@ -121,3 +123,56 @@ you deliberately want to erase that evaluation data.
 | Python opens Microsoft Store | Install/configure Python and check Windows App Execution Aliases |
 
 See [OPERATIONS.md](OPERATIONS.md) for deeper diagnosis without exposing secrets.
+
+### MinIO module download failures
+
+If `go build` fails while downloading a module, record the first error and its
+host. HTTP 403 means the download was denied; the build log alone does not prove
+whether the response came from the origin, a redirected download host or a
+network intermediary. Go's default `https://proxy.golang.org,direct` setting only
+falls back after HTTP 404/410, not 403. See the
+[official proxy behavior](https://go.dev/ref/mod#communicating-with-proxies).
+
+This project now defaults to direct downloads from the upstream source
+repositories, while retaining checksum verification. To update an existing
+clone, run the following in the project directory. Stop if Git reports local
+changes/conflicts; do not discard your work to force the update.
+
+```powershell
+git status --short
+git pull --ff-only origin main
+docker compose --progress plain build minio
+```
+
+Keep the existing `.env`; an absent `MINIO_GOPROXY` already defaults to `direct`.
+If you previously set this variable in `.env` or PowerShell, check that override.
+The first direct build may take longer because Go retrieves source repositories.
+BuildKit caches successful downloads and compiler work for later attempts. Do
+not use `--no-cache`, prune caches or delete data volumes as a network fix.
+
+Only after the build exits successfully, start the complete stack:
+
+```powershell
+docker compose up --build -d --wait --wait-timeout 300
+docker compose ps -a
+```
+
+Only after startup succeeds and `api` is running/healthy, create the administrator:
+
+```powershell
+docker compose exec api python manage.py createsuperuser
+```
+
+If your network requires an approved Go module proxy, set `MINIO_GOPROXY` in
+`.env` to its HTTPS URL before rebuilding. Follow your organization's access
+policy. Do not put credentials in this value or disable TLS/checksum verification.
+No third-party proxy or automatic fallback on access denials is selected by the
+project. Direct mode still requires access to upstream repositories, module
+discovery hosts and, when needed, `sum.golang.org`; it cannot resolve every
+network restriction. If another host denies access, preserve the first error
+and arrange an authorized route before retrying.
+
+Do not regenerate secrets to fix a download error. Compose uses the fixed project
+name `mini-dms`, so an existing named volume can be reused even from a new clone
+directory; changing passwords in a new `.env` can then break database/storage
+authentication. Never share `.env`, proxy credentials or expanded Compose config.
