@@ -111,6 +111,7 @@ you deliberately want to erase that evaluation data.
 | Symptom | Check |
 | --- | --- |
 | Docker engine connection error | Start Docker Desktop; confirm Linux containers and WSL integration if applicable |
+| A previous MinIO build fails in `apt-get` with exit 100 | Pull the current repository revision; the final MinIO image no longer uses `apt-get`. Rebuild with `docker compose build minio`. |
 | Private repository not found | Sign in to the correct GitHub account with repository access |
 | Port 8000/9001 already in use | Set `API_PORT` / `MINIO_CONSOLE_PORT` in `.env` and restart; adjust browser URLs |
 | Invalid database password after editing `.env` | Existing PostgreSQL volumes retain their original credentials; restore the original password or rotate it deliberately |

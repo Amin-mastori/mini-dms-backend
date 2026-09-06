@@ -191,6 +191,13 @@ are not immutable digests; this is reproducible configuration, not a bit-for-bit
 image reproducibility claim. Dependency scanning and supported-provider choice
 remain release responsibilities.
 
+The final MinIO stage is a non-root `scratch` image containing only the statically
+compiled server, CA certificate bundle, upstream license and a small Go HTTP
+health probe. It intentionally avoids package-manager access during the final
+stage. This reduces both the runtime surface and exposure to host-specific Debian
+mirror/proxy failures. The source-build stage still needs GitHub and Go module
+network access on the first build.
+
 DELETE removes the database row immediately and queues object deletion in the
 same transaction as its audit event. It does not promise erasure from provider
 version history, replicas, backups or retention policies. That requires a defined

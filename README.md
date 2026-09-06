@@ -88,7 +88,9 @@ overwrites an existing `.env`. Keep `.env` private. Never paste it into an issue
 > The first build can take several minutes. MinIO's October 2025 security
 > release is source-only, so its image is built from a specific upstream commit.
 > This avoids depending on the older official prebuilt image. Subsequent builds
-> reuse Docker's cache. See [the storage decision](ARCHITECTURE.md#storage).
+> reuse Docker's cache. The final server image is a minimal non-root image with
+> a compiled health probe and does not run `apt-get`. See
+> [the storage decision](ARCHITECTURE.md#storage).
 
 After startup:
 
