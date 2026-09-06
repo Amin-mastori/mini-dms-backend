@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
-from django.db import close_old_connections, connection
+from django.db import close_old_connections, connection, connections
 
 from documents.jobs import claim
 from documents.models import Document, Job
@@ -63,7 +63,7 @@ def test_two_workers_cannot_claim_same_job(document):
         try:
             return claim(job.id) is not None
         finally:
-            close_old_connections()
+            connections.close_all()
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(lambda _: worker(), range(2)))
@@ -86,7 +86,7 @@ def test_two_concurrent_metadata_writes_only_one_wins(user, document):
                 HTTP_IF_MATCH='"1"',
             ).status_code
         finally:
-            close_old_connections()
+            connections.close_all()
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         results = list(pool.map(update, ["First edit", "Second edit"]))
@@ -123,7 +123,7 @@ def test_concurrent_idempotent_upload_has_one_document(user, upload_file):
             )
             return response.status_code, response.data.get("id")
         finally:
-            close_old_connections()
+            connections.close_all()
 
     with (
         patch("documents.services.default_storage.save", side_effect=simultaneous_save),

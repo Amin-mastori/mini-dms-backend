@@ -23,6 +23,7 @@ dev = ["pytest==9.1.1", "pytest-django==4.14.0", "pytest-cov==7.1.0", "ruff==0.1
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"
+filterwarnings = ["error::pytest.PytestWarning"]
 markers = ["postgres: requires real PostgreSQL", "ocr: invokes the real OCR engine"]
 
 [tool.ruff]

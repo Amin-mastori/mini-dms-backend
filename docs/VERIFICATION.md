@@ -30,9 +30,24 @@ services, so those were not silently substituted in the production configuration
    starts the complete stack and runs actual HTTP upload/OCR/download flows with
    two isolated users and PNG/JPEG/native/scanned PDFs.
 
-Check the [actual CI run](https://github.com/Amin-mastori/mini-dms-backend/actions)
-for the relevant commit. Defining a job does not mean it passed. This file will
-be updated with observed CI results when available.
+Observed [CI run 34050208019](https://github.com/Amin-mastori/mini-dms-backend/actions/runs/34050208019),
+for commit `9576e45c645296e82765dc3911fe99f6c218f35e`, completed both jobs successfully:
+
+| Check | Observed result |
+| --- | --- |
+| Quality suite on Python 3.12.14 / PostgreSQL 17.11 | **95 passed**, **94.26% statement coverage** |
+| Ruff, Django and migration drift | Passed |
+| OpenAPI validation and checked-in schema comparison | Passed |
+| Docker image builds and service startup | Passed |
+| Real PNG/JPEG/native-PDF/scanned-PDF extraction | Passed |
+| Two-user isolation, upload idempotency, search, pagination and revision conflicts | Passed |
+| Authorized downloads and deletion audit retention | Passed |
+
+The first quality run also exposed a test-database teardown warning: thread-local
+connections in concurrency tests were still open. Test cleanup now closes each
+thread's connections explicitly, and pytest infrastructure warnings are treated
+as errors. Consult the [latest Actions results](https://github.com/Amin-mastori/mini-dms-backend/actions)
+for subsequent commits; the table above names the exact observed baseline.
 
 ## Not established by the current tests
 
