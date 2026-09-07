@@ -3055,7 +3055,8 @@ components:
           maxLength: 64
         tags:
           type: string
-          description: JSON array encoded as a multipart text field.
+          description: JSON array encoded as a multipart text field. Comma-separated
+            values emitted by Swagger UI are also accepted.
           example: '["test","invoice"]'
         metadata:
           type: string

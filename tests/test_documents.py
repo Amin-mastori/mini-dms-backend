@@ -37,6 +37,34 @@ def test_upload_is_private_async_and_audited(client, upload_file, user):
 
 
 @pytest.mark.parametrize(
+    ("encoded_tags", "expected_tags"),
+    [
+        ('["finance","urgent"]', ["finance", "urgent"]),
+        ("finance, urgent", ["finance", "urgent"]),
+    ],
+)
+def test_upload_accepts_json_and_swagger_csv_tags(client, upload_file, encoded_tags, expected_tags):
+    response = client.post(
+        "/api/v1/documents/",
+        {"file": upload_file(), "title": "Invoice", "tags": encoded_tags},
+        format="multipart",
+    )
+    assert response.status_code == 201
+    assert response.data["tags"] == expected_tags
+    assert Document.objects.get(pk=response.data["id"]).tags == expected_tags
+
+
+def test_upload_rejects_malformed_structured_tags(client, upload_file):
+    response = client.post(
+        "/api/v1/documents/",
+        {"file": upload_file(), "title": "Invoice", "tags": '["finance",]'},
+        format="multipart",
+    )
+    assert response.status_code == 400
+    assert "tags" in response.data["error"]["details"]
+
+
+@pytest.mark.parametrize(
     "name,content",
     [
         ("evil.exe", b"MZ executable"),

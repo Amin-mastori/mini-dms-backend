@@ -35,12 +35,27 @@ class JSONObjectField(serializers.JSONField):
 @extend_schema_field(
     {
         "type": "string",
-        "description": "JSON array encoded as a multipart text field.",
+        "description": (
+            "JSON array encoded as a multipart text field. Comma-separated values "
+            "emitted by Swagger UI are also accepted."
+        ),
         "example": '["test","invoice"]',
     }
 )
 class MultipartTagsField(serializers.JSONField):
-    pass
+    def to_internal_value(self, data):
+        try:
+            return super().to_internal_value(data)
+        except serializers.ValidationError:
+            if not isinstance(data, str):
+                raise
+            value = data.strip()
+            if not value or any(character in value for character in '[]{}"'):
+                raise
+            tags = [tag.strip() for tag in value.split(",")]
+            if any(not tag for tag in tags):
+                raise
+            return tags
 
 
 @extend_schema_field(

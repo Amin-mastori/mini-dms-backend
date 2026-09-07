@@ -112,7 +112,10 @@ def test_document_upload_schema_offers_a_binary_multipart_form():
     assert file_schema == {"type": "string", "format": "binary", "writeOnly": True}
     assert schema["components"]["schemas"][reference]["properties"]["tags"] == {
         "type": "string",
-        "description": "JSON array encoded as a multipart text field.",
+        "description": (
+            "JSON array encoded as a multipart text field. Comma-separated values "
+            "emitted by Swagger UI are also accepted."
+        ),
         "example": '["test","invoice"]',
     }
     assert schema["components"]["schemas"][reference]["properties"]["metadata"] == {
