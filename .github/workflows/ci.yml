@@ -75,8 +75,13 @@ jobs:
         run: |
           docker compose config --quiet
           docker compose --profile test build
+      - name: Export and reload the MinIO image
+        run: |
+          python scripts/minio_image.py export --directory "$RUNNER_TEMP/minio-image" --revision "$GITHUB_SHA"
+          docker image rm mini-dms-minio:2025-10-15
+          python scripts/minio_image.py load --directory "$RUNNER_TEMP/minio-image"
       - name: Start services
-        run: docker compose up -d --wait --wait-timeout 180
+        run: docker compose up --no-build -d --wait --wait-timeout 180
       - name: Create evaluation administrator
         env:
           DJANGO_SUPERUSER_USERNAME: ci-admin
@@ -88,6 +93,17 @@ jobs:
           SMOKE_USERNAME: ci-admin
           SMOKE_PASSWORD: ephemeral-ci-admin-passphrase-5739
         run: docker compose --profile test run --rm -e SMOKE_USERNAME -e SMOKE_PASSWORD test python scripts/smoke_test.py
+      - name: Publish verified private MinIO image
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.repository.private
+        uses: actions/upload-artifact@v4
+        with:
+          name: minio-image-linux-amd64-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/minio-image/minio-image.tar.gz
+            ${{ runner.temp }}/minio-image/manifest.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
       - name: Service diagnostics on failure
         if: failure()
         run: |

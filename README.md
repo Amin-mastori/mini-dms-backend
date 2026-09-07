@@ -92,6 +92,14 @@ overwrites an existing `.env`. Keep `.env` private. Never paste it into an issue
 > a compiled health probe and does not run `apt-get`. See
 > [the storage decision](ARCHITECTURE.md#storage).
 
+> [!TIP]
+> If MinIO dependency downloads fail on your network, use the
+> [private CI-built MinIO image](docs/WINDOWS_SETUP.md#use-the-private-minio-image).
+> The acceptance job exports and reloads the image, exercises the full stack,
+> then publishes a seven-day download with a checksum and source revision.
+> This avoids building MinIO locally; other services still need their usual
+> images/dependencies. Keep your existing `.env` and Docker volumes.
+
 After startup:
 
 | Resource | Address |

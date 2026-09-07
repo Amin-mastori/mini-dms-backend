@@ -9,9 +9,10 @@ Executed on Python 3.12.13 with the pinned application libraries:
 - OpenAPI generation, validation and documentation endpoint tests.
 - Portable API/workflow suite, including real English Tesseract image extraction
   and real PDFium text/rendering paths.
-- Latest recorded portable suite: **88 passed, 7 PostgreSQL-only tests skipped**;
+- Latest recorded portable suite: **108 passed, 7 PostgreSQL-only tests skipped**;
   application statement coverage **93.74%**. PostgreSQL-only additions exercise
-  simultaneous metadata edits and owner-scoped idempotent uploads.
+  simultaneous metadata edits and owner-scoped idempotent uploads. The total also
+  includes 20 image-bundle tests; application coverage excludes the CLI helper.
 
 The portable suite uses test-only SQLite, a temporary filesystem storage backend,
 a memory broker and fault-injected failures. It does not certify PostgreSQL
@@ -29,6 +30,13 @@ services, so those were not silently substituted in the production configuration
 2. **Real Compose acceptance:** builds all images, provisions a private bucket,
    starts the complete stack and runs actual HTTP upload/OCR/download flows with
    two isolated users and PNG/JPEG/native/scanned PDFs.
+
+The acceptance job also exports and reloads the MinIO image before starting
+services with `--no-build`. Only a successful private main-branch acceptance run
+publishes the image bundle. `tests/test_minio_image.py` covers manifest/path/tag
+validation, checksum failures, image mismatches and a mocked export/load round
+trip. Those unit tests alone do not prove that Docker can import or run an image;
+the real acceptance job supplies that separate check.
 
 Observed [CI run 34050208019](https://github.com/Amin-mastori/mini-dms-backend/actions/runs/34050208019),
 for commit `9576e45c645296e82765dc3911fe99f6c218f35e`, completed both jobs successfully:

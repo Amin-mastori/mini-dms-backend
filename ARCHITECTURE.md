@@ -198,6 +198,38 @@ stage. This reduces both the runtime surface and exposure to host-specific Debia
 mirror/proxy failures. The source-build stage still needs GitHub and Go module
 network access on the first build.
 
+For developer networks that cannot retrieve Go module archives, the existing
+Compose acceptance job can distribute its own MinIO image as a private GitHub
+Actions artifact. It exports the specific image tag, removes that tag only from
+the disposable CI runner, reloads the archive, and tests the full stack with
+`--no-build`. Upload runs only after successful acceptance on the private
+repository's main branch; pull requests do not publish this image artifact.
+The artifact is retained for seven days and contains only the compressed image
+and a manifest, not environment files, service credentials or data volumes.
+
+The loader checks the archive's SHA-256 before invoking Docker, then checks the
+platform and a fingerprint of ordered filesystem-layer digests and normalized
+runtime configuration. It records the build-time image ID for diagnostics but
+does not require an identical ID on import: Docker's classic/containerd stores
+can identify the same imported content differently, as reported in
+[Moby issue 51934](https://github.com/moby/moby/issues/51934). The manifest records
+the project commit for source traceability. These checks detect corruption and
+image mismatches; they are not
+a digital signature and do not make an untrusted archive safe. Downloads must
+come from the authenticated repository's successful CI runs. The trust boundary
+includes repository contributors, CI configuration/runners and upstream build
+dependencies. The current artifact targets Linux/amd64, including x64 Windows
+with Docker Desktop running Linux containers.
+
+This route relocates the MinIO build; it is not an offline distribution of the
+entire stack, an independent dependency mirror or a production release process.
+Upstream availability, image scanning, retention and license obligations still
+need management. A direct-source download experiment failed because the pinned
+`minio/console` dependency requested GitHub authentication; the source build keeps
+the verified module-mirror configuration and does not embed personal tokens.
+See [Docker image loading](https://docs.docker.com/reference/cli/docker/image/load/)
+and [GitHub artifact access](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
+
 DELETE removes the database row immediately and queues object deletion in the
 same transaction as its audit event. It does not promise erasure from provider
 version history, replicas, backups or retention policies. That requires a defined
