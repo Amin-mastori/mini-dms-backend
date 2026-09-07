@@ -1291,9 +1291,6 @@ paths:
       - Documents
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UploadRequest'
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/UploadRequest'

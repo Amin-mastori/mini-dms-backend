@@ -4,6 +4,7 @@ import uuid
 from unittest.mock import patch
 
 import pytest
+import yaml
 from redis.exceptions import ConnectionError as RedisConnectionError
 from rest_framework.test import APIClient
 
@@ -100,6 +101,15 @@ def test_download_outage_safe_error(client, document):
 @pytest.mark.parametrize("url", ["/api/schema/", "/api/docs/", "/api/redoc/"])
 def test_api_documentation_is_available(url):
     assert APIClient().get(url).status_code == 200
+
+
+def test_document_upload_schema_offers_a_binary_multipart_form():
+    schema = yaml.safe_load(APIClient().get("/api/schema/").content)
+    content = schema["paths"]["/api/v1/documents/"]["post"]["requestBody"]["content"]
+    assert list(content) == ["multipart/form-data"]
+    reference = content["multipart/form-data"]["schema"]["$ref"].rsplit("/", 1)[-1]
+    file_schema = schema["components"]["schemas"][reference]["properties"]["file"]
+    assert file_schema == {"type": "string", "format": "binary", "writeOnly": True}
 
 
 def test_oversized_request_rejected_before_body_parsing(client, settings):

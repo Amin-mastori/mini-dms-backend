@@ -111,6 +111,9 @@ After startup:
 | Liveness | [http://localhost:8000/health/live/](http://localhost:8000/health/live/) |
 | Development storage console | [http://localhost:9001](http://localhost:9001) |
 
+The document-create operation is documented only as `multipart/form-data`, so
+Swagger renders its `file` property as a file picker rather than a JSON string.
+
 Ports bind to `127.0.0.1`. PostgreSQL, Redis and the MinIO S3 API have no host
 ports. Storage-console credentials are the `MINIO_ROOT_*` values in your local
 `.env`; the application uses a different, bucket-scoped identity. Files are

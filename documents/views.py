@@ -125,7 +125,7 @@ class DocumentViewSet(viewsets.GenericViewSet):
         return self.get_paginated_response(DocumentListSerializer(page, many=True).data)
 
     @extend_schema(
-        request=UploadSerializer,
+        request={"multipart/form-data": UploadSerializer},
         responses={201: DocumentSerializer, 200: DocumentSerializer},
         parameters=[OpenApiParameter("Idempotency-Key", str, OpenApiParameter.HEADER)],
         tags=["Documents"],
