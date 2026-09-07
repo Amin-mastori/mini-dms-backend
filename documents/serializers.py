@@ -32,6 +32,28 @@ class JSONObjectField(serializers.JSONField):
     pass
 
 
+@extend_schema_field(
+    {
+        "type": "string",
+        "description": "JSON array encoded as a multipart text field.",
+        "example": '["test","invoice"]',
+    }
+)
+class MultipartTagsField(serializers.JSONField):
+    pass
+
+
+@extend_schema_field(
+    {
+        "type": "string",
+        "description": "JSON object encoded as a multipart text field.",
+        "example": '{"department":"finance","year":2026}',
+    }
+)
+class MultipartJSONObjectField(serializers.JSONField):
+    pass
+
+
 class MetadataSerializer(StrictInputMixin, serializers.Serializer):
     title = serializers.CharField(max_length=255)
     description = serializers.CharField(max_length=10000, allow_blank=True, default="")
@@ -68,6 +90,8 @@ class MetadataSerializer(StrictInputMixin, serializers.Serializer):
 
 
 class UploadSerializer(MetadataSerializer):
+    tags = MultipartTagsField(default=list)
+    metadata = MultipartJSONObjectField(default=dict)
     file = serializers.FileField(write_only=True, allow_empty_file=False)
 
     def validate_file(self, upload):

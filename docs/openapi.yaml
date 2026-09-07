@@ -1198,3 +1198,1937 @@ paths:
               description: Correlation ID shared with audit and job logs.
         '400':
           description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+    post:
+      operationId: api_v1_documents_create
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        schema:
+          type: string
+      tags:
+      - Documents
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '409':
+          description: State or idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '412':
+          description: Revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '428':
+          description: If-Match required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '413':
+          description: Payload too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '415':
+          description: Unsupported media type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+  /api/v1/documents/{id}/:
+    get:
+      operationId: api_v1_documents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Documents
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+    patch:
+      operationId: api_v1_documents_partial_update
+      parameters:
+      - in: header
+        name: If-Match
+        schema:
+          type: string
+        description: 'Current metadata revision, quoted: "1".'
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMetadataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMetadataRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '409':
+          description: State or idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '412':
+          description: Revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '428':
+          description: If-Match required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '413':
+          description: Payload too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '415':
+          description: Unsupported media type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+    delete:
+      operationId: api_v1_documents_destroy
+      parameters:
+      - in: header
+        name: If-Match
+        schema:
+          type: string
+        description: 'Current metadata revision, quoted: "1".'
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Documents
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '409':
+          description: State or idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '412':
+          description: Revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '428':
+          description: If-Match required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '413':
+          description: Payload too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '415':
+          description: Unsupported media type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+  /api/v1/documents/{id}/download/:
+    get:
+      operationId: api_v1_documents_download_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Documents
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+  /api/v1/documents/{id}/reprocess/:
+    post:
+      operationId: api_v1_documents_reprocess_create
+      parameters:
+      - in: header
+        name: If-Match
+        schema:
+          type: string
+        description: 'Current metadata revision, quoted: "1".'
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Processing
+      security:
+      - jwtAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '409':
+          description: State or idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '412':
+          description: Revision conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '428':
+          description: If-Match required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '413':
+          description: Payload too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '415':
+          description: Unsupported media type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+  /api/v1/documents/{id}/status/:
+    get:
+      operationId: api_v1_documents_status_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Processing
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessingStatus'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+  /api/v1/documents/{id}/text/:
+    get:
+      operationId: api_v1_documents_text_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        required: true
+      tags:
+      - Processing
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OCRText'
+          description: ''
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '401':
+          description: Authentication required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+        '503':
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+                format: uuid
+              description: Correlation ID shared with audit and job logs.
+  /health/live/:
+    get:
+      operationId: health_live_retrieve
+      tags:
+      - Operations
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+  /health/ready/:
+    get:
+      operationId: health_ready_retrieve
+      tags:
+      - Operations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+components:
+  schemas:
+    Audit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        document_id:
+          type: string
+          format: uuid
+          readOnly: true
+        owner_id:
+          type: integer
+          nullable: true
+          readOnly: true
+        actor_id:
+          type: integer
+          nullable: true
+          readOnly: true
+        actor_kind:
+          type: string
+          readOnly: true
+        action:
+          type: string
+          readOnly: true
+        request_id:
+          type: string
+          format: uuid
+          readOnly: true
+        details:
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action
+      - actor_id
+      - actor_kind
+      - created_at
+      - details
+      - document_id
+      - id
+      - owner_id
+      - request_id
+    CreateUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 128
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          default: user
+      required:
+      - password
+      - username
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        owner_id:
+          type: integer
+          readOnly: true
+        filename:
+          type: string
+          readOnly: true
+        mime_type:
+          type: string
+          readOnly: true
+        size:
+          type: integer
+          readOnly: true
+        sha256:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        document_type:
+          type: string
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+          maxItems: 32
+          readOnly: true
+        metadata:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        revision:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        attempts:
+          type: integer
+          readOnly: true
+        processed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        error_code:
+          type: string
+          readOnly: true
+        error_message:
+          type: string
+          readOnly: true
+        processing_info:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - attempts
+      - created_at
+      - description
+      - document_type
+      - error_code
+      - error_message
+      - filename
+      - id
+      - metadata
+      - mime_type
+      - owner_id
+      - processed_at
+      - processing_info
+      - revision
+      - sha256
+      - size
+      - status
+      - tags
+      - title
+      - updated_at
+    DocumentList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        filename:
+          type: string
+          readOnly: true
+        mime_type:
+          type: string
+          readOnly: true
+        size:
+          type: integer
+          readOnly: true
+        document_type:
+          type: string
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+          maxItems: 32
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        revision:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - document_type
+      - filename
+      - id
+      - mime_type
+      - revision
+      - size
+      - status
+      - tags
+      - title
+      - updated_at
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+        checks:
+          type: object
+          additionalProperties: {}
+      required:
+      - status
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        document_id:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/KindEnum'
+          readOnly: true
+        state:
+          allOf:
+          - $ref: '#/components/schemas/StateEnum'
+          readOnly: true
+        attempts:
+          type: integer
+          readOnly: true
+        max_attempts:
+          type: integer
+          readOnly: true
+        available_at:
+          type: string
+          format: date-time
+          readOnly: true
+        lease_until:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        request_id:
+          type: string
+          format: uuid
+          readOnly: true
+        error_code:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - attempts
+      - available_at
+      - created_at
+      - document_id
+      - error_code
+      - id
+      - kind
+      - lease_until
+      - max_attempts
+      - request_id
+      - state
+      - updated_at
+    KindEnum:
+      enum:
+      - ocr
+      - delete_object
+      type: string
+      description: |-
+        * `ocr` - Ocr
+        * `delete_object` - Delete
+    OCRText:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        text:
+          type: string
+      required:
+      - id
+      - status
+      - text
+    PaginatedAuditList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Audit'
+    PaginatedDocumentListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentList'
+    PaginatedJobList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedMetadataRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          default: ''
+          maxLength: 10000
+        document_type:
+          type: string
+          default: ''
+          maxLength: 64
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+          maxItems: 32
+        metadata:
+          type: object
+          additionalProperties: {}
+    ProcessingStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        attempts:
+          type: integer
+          readOnly: true
+        error_code:
+          type: string
+          readOnly: true
+        error_message:
+          type: string
+          readOnly: true
+        processed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        processing_info:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - attempts
+      - error_code
+      - error_message
+      - id
+      - processed_at
+      - processing_info
+      - status
+    RoleEnum:
+      enum:
+      - user
+      - admin
+      type: string
+      description: |-
+        * `user` - user
+        * `admin` - admin
+    StateEnum:
+      enum:
+      - pending
+      - running
+      - succeeded
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `running` - Running
+        * `succeeded` - Succeeded
+        * `failed` - Failed
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - succeeded
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `processing` - Processing
+        * `succeeded` - Succeeded
+        * `failed` - Failed
+    TokenBlacklistRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    UploadRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          default: ''
+          maxLength: 10000
+        document_type:
+          type: string
+          default: ''
+          maxLength: 64
+        tags:
+          type: string
+          description: JSON array encoded as a multipart text field.
+          example: '["test","invoice"]'
+        metadata:
+          type: string
+          description: JSON object encoded as a multipart text field.
+          example: '{"department":"finance","year":2026}'
+        file:
+          type: string
+          format: binary
+          writeOnly: true
+      required:
+      - file
+      - title
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        role:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - date_joined
+      - email
+      - id
+      - is_active
+      - role
+      - username
+    ErrorEnvelope:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          - details
+          - request_id
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              format: uuid
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

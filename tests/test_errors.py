@@ -111,13 +111,14 @@ def test_document_upload_schema_offers_a_binary_multipart_form():
     file_schema = schema["components"]["schemas"][reference]["properties"]["file"]
     assert file_schema == {"type": "string", "format": "binary", "writeOnly": True}
     assert schema["components"]["schemas"][reference]["properties"]["tags"] == {
-        "type": "array",
-        "items": {"type": "string", "maxLength": 64},
-        "maxItems": 32,
+        "type": "string",
+        "description": "JSON array encoded as a multipart text field.",
+        "example": '["test","invoice"]',
     }
     assert schema["components"]["schemas"][reference]["properties"]["metadata"] == {
-        "type": "object",
-        "additionalProperties": {},
+        "type": "string",
+        "description": "JSON object encoded as a multipart text field.",
+        "example": '{"department":"finance","year":2026}',
     }
 
 
