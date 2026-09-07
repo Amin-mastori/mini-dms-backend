@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 FROM minio/mc:RELEASE.2025-08-13T08-35-41Z AS minio-client
 FROM python:3.12.13-slim-bookworm AS runtime
 

@@ -114,6 +114,7 @@ you deliberately want to erase that evaluation data.
 | Docker engine connection error | Start Docker Desktop; confirm Linux containers and WSL integration if applicable |
 | A previous MinIO build fails in `apt-get` with exit 100 | Pull the current repository revision; the final MinIO image no longer uses `apt-get`. Rebuild with `docker compose build minio`. |
 | MinIO module download returns `403 Forbidden` | Use the private CI-built image below; increasing the startup timeout does not fix a denied download |
+| Resolving `docker/dockerfile:1` returns `403 Forbidden` | Pull the current repository revision. The application Dockerfile uses only standard instructions and no longer requests that optional external frontend. Base images still require registry access when absent locally. |
 | `service "api" is not running`, with an empty `compose ps -a` | Resolve the first build/startup failure; no containers are listed for the current Compose project/context |
 | Private repository not found | Sign in to the correct GitHub account with repository access |
 | Port 8000/9001 already in use | Set `API_PORT` / `MINIO_CONSOLE_PORT` in `.env` and restart; adjust browser URLs |
@@ -201,7 +202,9 @@ docker compose build api storage-init
 `storage-init` has its own image. This explicit command does **not** build MinIO.
 It still needs access to Python/OS dependencies and image registries when they
 are not cached. PostgreSQL/Redis images also need to be available locally or
-downloadable. This is not an entirely offline installation.
+downloadable. The application Dockerfile omits the optional external syntax
+frontend because its instructions do not require it; this prevents an extra
+`docker/dockerfile:1` registry lookup. This is not an entirely offline installation.
 
 ### 5. Start without rebuilding MinIO
 
