@@ -113,10 +113,10 @@ you deliberately want to erase that evaluation data.
 | --- | --- |
 | Docker engine connection error | Start Docker Desktop; confirm Linux containers and WSL integration if applicable |
 | A previous MinIO build fails in `apt-get` with exit 100 | Pull the current repository revision; the final MinIO image no longer uses `apt-get`. Rebuild with `docker compose build minio`. |
-| MinIO module download returns `403 Forbidden` | Use the private CI-built image below; increasing the startup timeout does not fix a denied download |
+| MinIO module download returns `403 Forbidden` | Use the verified CI-built image below; increasing the startup timeout does not fix a denied download |
 | Resolving `docker/dockerfile:1` returns `403 Forbidden` | Pull the current repository revision. The application Dockerfile uses only standard instructions and no longer requests that optional external frontend. Base images still require registry access when absent locally. |
 | `service "api" is not running`, with an empty `compose ps -a` | Resolve the first build/startup failure; no containers are listed for the current Compose project/context |
-| Private repository not found | Sign in to the correct GitHub account with repository access |
+| Repository not found | Verify the clone URL and repository visibility; sign in if GitHub requests authentication |
 | Port 8000/9001 already in use | Set `API_PORT` / `MINIO_CONSOLE_PORT` in `.env` and restart; adjust browser URLs |
 | Invalid database password after editing `.env` | Existing PostgreSQL volumes retain their original credentials; restore the original password or rotate it deliberately |
 | Upload stays pending | Check dispatcher, worker and Redis health; inspect job records as administrator |
@@ -126,7 +126,7 @@ you deliberately want to erase that evaluation data.
 
 See [OPERATIONS.md](OPERATIONS.md) for deeper diagnosis without exposing secrets.
 
-## Use the private MinIO image
+## Use the verified CI-built MinIO image
 
 Use this alternative when the local MinIO source build cannot download its Go
 dependencies. It does not require changing storage providers or supplying a
@@ -166,10 +166,10 @@ The `artifacts` directory is excluded from Git and Docker build contexts. Do not
 extract the image into the project root, where it could enter application builds.
 
 Artifacts expire after seven days. To generate another, choose **Run workflow**
-on `main`, or re-run a suitable CI execution, and wait for success. Downloads
-require repository read access; the workflow does not publish to a public
-container registry. Availability still depends on GitHub Actions and its access
-to build dependencies.
+on `main`, or re-run a suitable CI execution, and wait for success. GitHub may
+require sign-in to download Actions artifacts; the workflow does not publish to
+a container registry. Availability still depends on GitHub Actions and its
+access to build dependencies.
 
 ### 3. Verify and load the image
 

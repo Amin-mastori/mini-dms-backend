@@ -79,8 +79,8 @@ docker compose exec api python manage.py createsuperuser
 ```
 
 Enter your own administrator username and a strong password when prompted.
-There is no default account or public signup endpoint. The repository is private;
-clone with your own configured GitHub authentication.
+There is no default account or public signup endpoint. Repository visibility
+does not change the API's authentication or document-ownership controls.
 
 `init_env.py` creates unique local secrets, does not print them and never
 overwrites an existing `.env`. Keep `.env` private. Never paste it into an issue.
@@ -95,7 +95,7 @@ overwrites an existing `.env`. Keep `.env` private. Never paste it into an issue
 
 > [!TIP]
 > If MinIO dependency downloads fail on your network, use the
-> [private CI-built MinIO image](docs/WINDOWS_SETUP.md#use-the-private-minio-image).
+> [verified CI-built MinIO image](docs/WINDOWS_SETUP.md#use-the-verified-ci-built-minio-image).
 > The acceptance job exports and reloads the image, exercises the full stack,
 > then publishes a seven-day download with a checksum and source revision.
 > This avoids building MinIO locally; other services still need their usual
@@ -514,5 +514,6 @@ not a recommendation to run an unmaintained storage deployment in production.
 Use a supported private object store, review current advisories, scan built images
 and complete the [production checklist](docs/OPERATIONS.md#production-checklist).
 
-There is no public redistribution license for this private evaluation project.
-Third-party components retain their own licenses; see [DEPENDENCIES.md](docs/DEPENDENCIES.md).
+No repository-wide redistribution license has been selected. Public visibility
+alone does not grant reuse rights. Third-party components retain their own
+licenses; see [DEPENDENCIES.md](docs/DEPENDENCIES.md).

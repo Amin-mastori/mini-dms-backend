@@ -9,7 +9,7 @@ Executed on Python 3.12.13 with the pinned application libraries:
 - OpenAPI generation, validation and documentation endpoint tests.
 - Portable API/workflow suite, including real English Tesseract image extraction
   and real PDFium text/rendering paths.
-- Latest recorded portable suite: **111 passed, 7 PostgreSQL-only tests skipped**;
+- Latest recorded portable suite: **114 passed, 7 PostgreSQL-only tests skipped**;
   application statement coverage **93.74%**. PostgreSQL-only additions exercise
   simultaneous metadata edits and owner-scoped idempotent uploads. The total also
   includes 20 image-bundle tests; application coverage excludes the CLI helper.
@@ -33,7 +33,7 @@ services, so those were not silently substituted in the production configuration
    users and PNG/JPEG/native/scanned PDFs.
 
 The acceptance job also exports and reloads the MinIO image before starting
-services with `--no-build`. Only a successful private main-branch acceptance run
+services with `--no-build`. Only a successful main-branch acceptance run
 publishes the image bundle. `tests/test_minio_image.py` covers manifest/path/tag
 validation, checksum failures, image mismatches and a mocked export/load round
 trip. Those unit tests alone do not prove that Docker can import or run an image;
@@ -50,12 +50,12 @@ an intentional source-level contract for the local helper; CI executes it on the
 project's tested Python 3.12 runtime and does not claim a separate Python 3.8
 runtime matrix for the application.
 
-Observed [CI run 34050208019](https://github.com/Amin-mastori/mini-dms-backend/actions/runs/34050208019),
-for commit `9576e45c645296e82765dc3911fe99f6c218f35e`, completed both jobs successfully:
+Observed [CI run 34115690081](https://github.com/Amin-mastori/mini-dms-backend/actions/runs/34115690081),
+for commit `e13de740aaa4fa4508ec9f82bceb14ae77a81f11`, completed both jobs successfully:
 
 | Check | Observed result |
 | --- | --- |
-| Quality suite on Python 3.12.14 / PostgreSQL 17.11 | **95 passed**, **94.26% statement coverage** |
+| Quality suite on Python 3.12.14 / PostgreSQL 17.11 | **121 passed**, **94.25% statement coverage** |
 | Ruff, Django and migration drift | Passed |
 | OpenAPI validation and checked-in schema comparison | Passed |
 | Docker image builds and service startup | Passed |

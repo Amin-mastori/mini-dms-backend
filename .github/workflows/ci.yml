@@ -95,8 +95,8 @@ jobs:
           SMOKE_USERNAME: ci-admin
           SMOKE_PASSWORD: ephemeral-ci-admin-passphrase-5739
         run: docker compose --profile test run --rm -e SMOKE_USERNAME -e SMOKE_PASSWORD test python scripts/smoke_test.py
-      - name: Publish verified private MinIO image
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.repository.private
+      - name: Publish verified MinIO image
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: minio-image-linux-amd64-${{ github.sha }}
