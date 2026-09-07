@@ -57,7 +57,7 @@ jobs:
         run: |
           python manage.py spectacular --file /tmp/openapi.yaml --validate --fail-on-warn
           diff -u docs/openapi.yaml /tmp/openapi.yaml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage
@@ -97,7 +97,7 @@ jobs:
         run: docker compose --profile test run --rm -e SMOKE_USERNAME -e SMOKE_PASSWORD test python scripts/smoke_test.py
       - name: Publish verified MinIO image
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: minio-image-linux-amd64-${{ github.sha }}
           path: |
