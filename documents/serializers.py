@@ -4,6 +4,7 @@ import re
 import unicodedata
 
 from django.conf import settings
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from core.errors import PayloadTooLarge
@@ -19,12 +20,24 @@ def json_depth(value):
     return 0
 
 
+@extend_schema_field(
+    {"type": "array", "items": {"type": "string", "maxLength": 64}, "maxItems": 32}
+)
+class TagsField(serializers.JSONField):
+    pass
+
+
+@extend_schema_field({"type": "object", "additionalProperties": {}})
+class JSONObjectField(serializers.JSONField):
+    pass
+
+
 class MetadataSerializer(StrictInputMixin, serializers.Serializer):
     title = serializers.CharField(max_length=255)
     description = serializers.CharField(max_length=10000, allow_blank=True, default="")
     document_type = serializers.CharField(max_length=64, allow_blank=True, default="")
-    tags = serializers.JSONField(default=list)
-    metadata = serializers.JSONField(default=dict)
+    tags = TagsField(default=list)
+    metadata = JSONObjectField(default=dict)
 
     def validate_tags(self, value):
         if not isinstance(value, list) or len(value) > 32:
@@ -102,6 +115,10 @@ class UploadSerializer(MetadataSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
+    tags = TagsField(read_only=True)
+    metadata = JSONObjectField(read_only=True)
+    processing_info = JSONObjectField(read_only=True)
+
     class Meta:
         model = Document
         fields = [
@@ -130,6 +147,8 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 
 class DocumentListSerializer(serializers.ModelSerializer):
+    tags = TagsField(read_only=True)
+
     class Meta:
         model = Document
         fields = [
@@ -149,6 +168,8 @@ class DocumentListSerializer(serializers.ModelSerializer):
 
 
 class ProcessingStatusSerializer(serializers.ModelSerializer):
+    processing_info = JSONObjectField(read_only=True)
+
     class Meta:
         model = Document
         fields = [

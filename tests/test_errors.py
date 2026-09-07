@@ -110,6 +110,23 @@ def test_document_upload_schema_offers_a_binary_multipart_form():
     reference = content["multipart/form-data"]["schema"]["$ref"].rsplit("/", 1)[-1]
     file_schema = schema["components"]["schemas"][reference]["properties"]["file"]
     assert file_schema == {"type": "string", "format": "binary", "writeOnly": True}
+    assert schema["components"]["schemas"][reference]["properties"]["tags"] == {
+        "type": "array",
+        "items": {"type": "string", "maxLength": 64},
+        "maxItems": 32,
+    }
+    assert schema["components"]["schemas"][reference]["properties"]["metadata"] == {
+        "type": "object",
+        "additionalProperties": {},
+    }
+
+
+def test_document_response_schema_exposes_json_shapes():
+    schema = yaml.safe_load(APIClient().get("/api/schema/").content)
+    properties = schema["components"]["schemas"]["Document"]["properties"]
+    assert properties["tags"]["type"] == "array"
+    assert properties["metadata"]["type"] == "object"
+    assert properties["processing_info"]["type"] == "object"
 
 
 def test_oversized_request_rejected_before_body_parsing(client, settings):

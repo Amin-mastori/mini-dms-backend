@@ -9,7 +9,7 @@ Executed on Python 3.12.13 with the pinned application libraries:
 - OpenAPI generation, validation and documentation endpoint tests.
 - Portable API/workflow suite, including real English Tesseract image extraction
   and real PDFium text/rendering paths.
-- Latest recorded portable suite: **109 passed, 7 PostgreSQL-only tests skipped**;
+- Latest recorded portable suite: **111 passed, 7 PostgreSQL-only tests skipped**;
   application statement coverage **93.74%**. PostgreSQL-only additions exercise
   simultaneous metadata edits and owner-scoped idempotent uploads. The total also
   includes 20 image-bundle tests; application coverage excludes the CLI helper.
