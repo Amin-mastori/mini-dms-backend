@@ -14,8 +14,9 @@ docker --version
 docker compose version
 ```
 
-Python 3.12 is the tested development version. For a Docker-only run, Python is
-used locally only to generate `.env`. If you use WSL, enable Docker Desktop's
+Python 3.12 is the tested application/development version. For a Docker-only run,
+Python 3.8+ can run the small local `.env` and image-bundle helpers; the application
+still runs on Python 3.12 inside its container. If you use WSL, enable Docker Desktop's
 integration for your distribution and keep the repository in the Linux home
 directory for better filesystem performance. The WSL command is `python3`.
 
@@ -130,7 +131,7 @@ Use this alternative when the local MinIO source build cannot download its Go
 dependencies. It does not require changing storage providers or supplying a
 GitHub token to Docker. The archive targets **Linux/amd64**: use Docker Desktop's
 Linux-container mode on x64 Windows. ARM64 and Windows-container images are not
-included. Python 3.12 and Docker are required by the verification/loading helper.
+included. Python 3.8+ and Docker are required by the verification/loading helper.
 
 ### 1. Update the existing clone
 

@@ -61,7 +61,8 @@ is in [REQUIREMENTS.md](docs/REQUIREMENTS.md).
 ### Prerequisites
 
 - Docker Desktop or Docker Engine with Docker Compose v2.20+.
-- Git and Python 3.12 locally for the small environment-initialization script.
+- Git and Python 3.8+ locally for the environment/image helper scripts. The
+  application images use the tested Python 3.12 runtime.
 - Internet access for the first image/dependency build.
 - Recommended for evaluation: 4 CPU cores, 6 GiB available Docker memory and
   several GiB of free disk. This is a starting allocation, not a measured SLA.

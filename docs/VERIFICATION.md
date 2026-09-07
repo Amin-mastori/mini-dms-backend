@@ -9,7 +9,7 @@ Executed on Python 3.12.13 with the pinned application libraries:
 - OpenAPI generation, validation and documentation endpoint tests.
 - Portable API/workflow suite, including real English Tesseract image extraction
   and real PDFium text/rendering paths.
-- Latest recorded portable suite: **108 passed, 7 PostgreSQL-only tests skipped**;
+- Latest recorded portable suite: **109 passed, 7 PostgreSQL-only tests skipped**;
   application statement coverage **93.74%**. PostgreSQL-only additions exercise
   simultaneous metadata edits and owner-scoped idempotent uploads. The total also
   includes 20 image-bundle tests; application coverage excludes the CLI helper.
@@ -37,6 +37,13 @@ publishes the image bundle. `tests/test_minio_image.py` covers manifest/path/tag
 validation, checksum failures, image mismatches and a mocked export/load round
 trip. Those unit tests alone do not prove that Docker can import or run an image;
 the real acceptance job supplies that separate check.
+
+The bundle checksum helper reads fixed-size chunks and avoids
+`hashlib.file_digest`, which is unavailable before Python 3.11. Its streaming
+behavior is covered by a file larger than one chunk. Python 3.8 compatibility is
+an intentional source-level contract for the local helper; CI executes it on the
+project's tested Python 3.12 runtime and does not claim a separate Python 3.8
+runtime matrix for the application.
 
 Observed [CI run 34050208019](https://github.com/Amin-mastori/mini-dms-backend/actions/runs/34050208019),
 for commit `9576e45c645296e82765dc3911fe99f6c218f35e`, completed both jobs successfully:

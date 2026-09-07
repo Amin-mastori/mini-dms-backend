@@ -15,11 +15,15 @@ IMAGE_TAG = "mini-dms-minio:2025-10-15"
 ARCHIVE = "minio-image.tar.gz"
 MANIFEST = "manifest.json"
 PLATFORM = "linux/amd64"
+HASH_CHUNK_SIZE = 1024 * 1024
 
 
 def sha256_file(path):
+    digest = hashlib.sha256()
     with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
+        for chunk in iter(lambda: stream.read(HASH_CHUNK_SIZE), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def image_details():

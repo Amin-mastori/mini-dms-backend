@@ -64,6 +64,13 @@ def test_non_object_manifest_rejected():
         minio_image.validate_manifest([])
 
 
+def test_sha256_file_streams_multiple_chunks_without_file_digest(tmp_path):
+    content = b"a" * (minio_image.HASH_CHUNK_SIZE + 17)
+    path = tmp_path / "large-enough-to-stream.bin"
+    path.write_bytes(content)
+    assert minio_image.sha256_file(path) == hashlib.sha256(content).hexdigest()
+
+
 def test_corrupted_archive_never_invokes_docker(bundle):
     directory, _ = bundle
     (directory / minio_image.ARCHIVE).write_bytes(b"changed")
