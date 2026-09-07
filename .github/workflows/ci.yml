@@ -88,6 +88,8 @@ jobs:
           DJANGO_SUPERUSER_EMAIL: ci@example.invalid
           DJANGO_SUPERUSER_PASSWORD: ephemeral-ci-admin-passphrase-5739
         run: docker compose run --rm -e DJANGO_SUPERUSER_USERNAME -e DJANGO_SUPERUSER_EMAIL -e DJANGO_SUPERUSER_PASSWORD api python manage.py createsuperuser --noinput
+      - name: Containerized PostgreSQL test suite
+        run: docker compose --profile test run --rm test pytest --cov --cov-fail-under=90
       - name: Full-stack smoke test
         env:
           SMOKE_USERNAME: ci-admin

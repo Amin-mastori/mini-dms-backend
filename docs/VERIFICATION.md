@@ -28,8 +28,9 @@ services, so those were not silently substituted in the production configuration
    actual search/index/trigger/concurrency tests, coverage threshold and OpenAPI
    drift check.
 2. **Real Compose acceptance:** builds all images, provisions a private bucket,
-   starts the complete stack and runs actual HTTP upload/OCR/download flows with
-   two isolated users and PNG/JPEG/native/scanned PDFs.
+   starts the complete stack, runs the PostgreSQL suite inside the hardened test
+   image, and exercises actual HTTP upload/OCR/download flows with two isolated
+   users and PNG/JPEG/native/scanned PDFs.
 
 The acceptance job also exports and reloads the MinIO image before starting
 services with `--no-build`. Only a successful private main-branch acceptance run
@@ -37,6 +38,10 @@ publishes the image bundle. `tests/test_minio_image.py` covers manifest/path/tag
 validation, checksum failures, image mismatches and a mocked export/load round
 trip. Those unit tests alone do not prove that Docker can import or run an image;
 the real acceptance job supplies that separate check.
+
+The Compose test service writes Coverage and pytest cache data to its writable
+`/tmp` mount. Application code remains read-only under `/app`; this also avoids
+host-dependent permission failures when the suite runs through Docker Desktop.
 
 The bundle checksum helper reads fixed-size chunks and avoids
 `hashlib.file_digest`, which is unavailable before Python 3.11. Its streaming

@@ -156,6 +156,8 @@ services:
       <<: *app-env
       DJANGO_SETTINGS_MODULE: config.settings.test
       TEST_POSTGRES: "1"
+      COVERAGE_FILE: /tmp/.coverage
+      PYTEST_ADDOPTS: -o cache_dir=/tmp/pytest-cache
     depends_on:
       db: {condition: service_healthy}
 
