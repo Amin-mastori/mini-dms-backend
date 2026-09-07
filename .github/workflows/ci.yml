@@ -34,7 +34,7 @@ jobs:
       POSTGRES_HOST: 127.0.0.1
       POSTGRES_PASSWORD: ci-only-database-password
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Create disposable secrets
         run: python scripts/init_env.py
       - name: Validate and build
