@@ -1,5 +1,5 @@
 FROM minio/mc:RELEASE.2025-08-13T08-35-41Z AS minio-client
-FROM python:3.12.13-slim-bookworm AS runtime
+FROM python:3.14.7-slim-bookworm AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 OMP_THREAD_LIMIT=1
 WORKDIR /app
